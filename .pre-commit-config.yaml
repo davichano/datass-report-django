@@ -4,10 +4,10 @@ repos:
       - id: black
         name: black
         entry: black
-        language: system
+        language: python
         types: [python]
         files: \.py$
-        args: ["--quiet"]
+        args: ["--quiet", "."]
         always_run: true
   - repo: local
     hooks:

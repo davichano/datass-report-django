@@ -34,7 +34,9 @@ Coming soon
 - Python
 
 ### Proyecto configurado con
-
+- black
+- flake8
+- pre-commit
 
 ### Desarrollo Continuo
 
