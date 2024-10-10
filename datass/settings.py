@@ -82,16 +82,6 @@ WSGI_APPLICATION = "datass.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "datass",
-#         "USER": "postgres",
-#         "PASSWORD": "12345",
-#         "HOST": "localhost",  # O el host de tu base de datos si está en un servidor externo
-#         "PORT": "5432",  # El puerto por defecto de PostgreSQL
-#     }
-# }
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -147,12 +137,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")  # 'media/' será la carpeta donde se almacenan los archivos
 MEDIA_URL = "/media/"  # URL para acceder a los archivos en 'media/'
 
+# Logging configuration
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "handlers": {
-        # Este bloque es el que está causando el problema
-        # Puedes comentar o eliminar esta parte
+        # Puedes descomentar este bloque si quieres logs en archivos
         # "file": {
         #     "level": "ERROR",
         #     "class": "logging.FileHandler",
@@ -163,6 +153,14 @@ LOGGING = {
             "class": "logging.StreamHandler",
         },
     },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],  # Puedes agregar "file" aquí si habilitas el handler de archivo
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    },
+}
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
@@ -179,10 +177,9 @@ CORS_ALLOW_METHODS = [
     "PUT",
 ]
 
+# Secret key and debug
 SECRET_KEY = config("SECRET_KEY", default="your-default-secret-key")
-
-# DEBUG
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-# ALLOWED_HOSTS
+# Allowed hosts
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="").split(",")
