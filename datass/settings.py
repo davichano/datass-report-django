@@ -151,20 +151,18 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "handlers": {
-        "file": {
-            "level": "ERROR",
-            "class": "logging.FileHandler",
-            "filename": os.path.join(BASE_DIR, "logs/django_errors.log"),
+        # Este bloque es el que está causando el problema
+        # Puedes comentar o eliminar esta parte
+        # "file": {
+        #     "level": "ERROR",
+        #     "class": "logging.FileHandler",
+        #     "filename": os.path.join(BASE_DIR, "logs/django_errors.log"),
+        # },
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
         },
     },
-    "loggers": {
-        "django": {
-            "handlers": ["file"],
-            "level": "ERROR",
-            "propagate": True,
-        },
-    },
-}
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
