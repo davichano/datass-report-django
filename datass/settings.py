@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+from decouple import config
 from pathlib import Path
 import os
 
@@ -19,13 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-7$_hrgdy6#kvpq_v*2oe5%ozi0quv6)(&4!o8j3hg6@l%hktcb"
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
 
 USER_APPS = [
     "locations",
@@ -100,11 +95,11 @@ WSGI_APPLICATION = "datass.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "datass-database",
-        "USER": "zeurbcufqd",
-        "PASSWORD": "NREE9KaGe$oJgWAm",
-        "HOST": "datass-server.postgres.database.azure.com",
-        "PORT": "5432",  # El puerto por defecto de PostgreSQL
+        "NAME": config("DB_NAME"),
+        "USER": config("DB_USER"),
+        "PASSWORD": config("DB_PASSWORD"),
+        "HOST": config("DB_HOST"),
+        "PORT": config("DB_PORT", default="5432"),
     }
 }
 
@@ -144,7 +139,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_URL = "static/"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -187,4 +181,10 @@ CORS_ALLOW_METHODS = [
     "PUT",
 ]
 
-ALLOWED_HOSTS = ["https://datassreport-fkbnc3acedfecgd5.canadacentral-01.azurewebsites.net"]
+SECRET_KEY = config("SECRET_KEY", default="your-default-secret-key")
+
+# DEBUG
+DEBUG = config("DEBUG", default=False, cast=bool)
+
+# ALLOWED_HOSTS
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="").split(",")
