@@ -43,14 +43,19 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = ["rest_framework"]
+THIRD_PARTY_APPS = [
+    "rest_framework",
+    "corsheaders",
+]
 
 # Application definition
 
 INSTALLED_APPS = USER_APPS + DJANGO_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -82,13 +87,23 @@ WSGI_APPLICATION = "datass.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "datass",
+#         "USER": "postgres",
+#         "PASSWORD": "12345",
+#         "HOST": "localhost",  # O el host de tu base de datos si está en un servidor externo
+#         "PORT": "5432",  # El puerto por defecto de PostgreSQL
+#     }
+# }
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "datass",
-        "USER": "postgres",
-        "PASSWORD": "12345",
-        "HOST": "localhost",  # O el host de tu base de datos si está en un servidor externo
+        "NAME": "datass-database",
+        "USER": "zeurbcufqd",
+        "PASSWORD": "NREE9KaGe$oJgWAm",
+        "HOST": "datass-server.postgres.database.azure.com",
         "PORT": "5432",  # El puerto por defecto de PostgreSQL
     }
 }
@@ -114,9 +129,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "es-pe"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "America/Lima"
 
 USE_I18N = True
 
@@ -125,7 +140,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_URL = "static/"
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -152,3 +171,20 @@ LOGGING = {
         },
     },
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://datass.dparedesa.com",
+    "https://datass.dparedesa.com",
+]
+
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+
+ALLOWED_HOSTS = ["https://datassreport-fkbnc3acedfecgd5.canadacentral-01.azurewebsites.net"]

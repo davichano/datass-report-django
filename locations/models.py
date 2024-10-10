@@ -1,3 +1,4 @@
+# locations/models.py
 from django.db import models
 
 
@@ -13,6 +14,37 @@ class Province(models.Model):
     def __str__(self):
         return self.name
 
+    def get_centroid(self):
+        """
+        Calcula el centroide de todos los centros poblados en los distritos de esta provincia,
+        basado en las coordenadas latitude_datass y longitude_datass.
+        """
+        # Obtener todos los centros poblados de los distritos de la provincia
+        population_centers = PopulationCenter.objects.filter(
+            district__province=self, latitude_datass__isnull=False, longitude_datass__isnull=False
+        ).exclude(latitude_datass=0, longitude_datass=0)
+
+        if not population_centers.exists():
+            return None, None  # Si no hay centros poblados válidos, devolver None
+
+        total_lat = 0
+        total_lon = 0
+        count = 0
+
+        for center in population_centers:
+            total_lat += float(center.latitude_datass)  # Convertir a float si es necesario
+            total_lon += float(center.longitude_datass)  # Convertir a float si es necesario
+            count += 1
+
+        if count == 0:
+            return None, None  # Si no hay centros poblados válidos, devolver None
+
+        # Calcular el promedio de las coordenadas
+        avg_lat = total_lat / count
+        avg_lon = total_lon / count
+
+        return avg_lat, avg_lon
+
 
 class District(models.Model):
     name = models.CharField(max_length=255)
@@ -26,6 +58,31 @@ class District(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_centroid(self):
+        population_centers = self.population_centers.filter(
+            latitude_datass__isnull=False,
+            longitude_datass__isnull=False,
+        ).exclude(latitude_datass=0, longitude_datass=0)
+
+        if not population_centers:
+            return None, None
+
+        total_lat = 0
+        total_lon = 0
+        count = 0
+        for center in population_centers:
+            total_lat += float(center.latitude_datass)  # Convertir a float si es necesario
+            total_lon += float(center.longitude_datass)  # Convertir a float si es necesario
+            count += 1
+
+        if count == 0:
+            return None, None
+
+        avg_lat = total_lat / count
+        avg_lon = total_lon / count
+
+        return avg_lat, avg_lon
 
 
 class PopulationCenter(models.Model):

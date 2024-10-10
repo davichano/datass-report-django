@@ -152,12 +152,13 @@ class CSVProcessingService:
             "survey_last_modified": survey_last_modified,
             "total_population": safe_numeric(row.get("p100_TotalPoblacion")),
             "inhabited_houses": safe_numeric(row.get("p100_ViviendasHabitadas")),
-            "has_water_system": safe_str(row.get("p105_TieneSistemaAgua")) == "sí",
+            "has_water_system": safe_str(row.get("p105_TieneSistemaAgua")).lower() == "si",
             "population_with_water": safe_numeric(row.get("p105c_NumeroPoblacionConAccesoServicio")),
             "total_houses_with_connection": safe_numeric(row.get("p105c_TotalViviendasConConexion")),
-            "has_sanitation_system": safe_str(row.get("p107_CuentaSistemaDisposicionExcretas")) == "sí",
+            "has_sanitation_system": safe_str(row.get("p107_CuentaSistemaDisposicionExcretas")).lower()
+            == "si",
             "survey_type": row.get("Encuesta_Tipo", ""),
-            "survey_completed": safe_str(row.get("Completado_Encuesta")) == "sí",
+            "survey_completed": safe_str(row.get("Completado_Encuesta")).lower() == "si",
         }
 
     @staticmethod
@@ -184,7 +185,7 @@ class CSVProcessingService:
 
         return {
             "provider_last_modified": provider_last_modified,
-            "has_operator": safe_str(row.get("p206_PrestadorServicioAyS_OperadorGasfitero")) == "sí",
+            "has_operator": safe_str(row.get("p206_PrestadorServicioAyS_OperadorGasfitero")).lower() == "si",
             "provider_name": row.get("Nombre_PrestadorServicio", ""),
             "incentive_payment_frequency": row.get(
                 "p206a_TipoIncentivoPago_FrecuenciaConQueRecibeIncentivo", ""
@@ -194,15 +195,15 @@ class CSVProcessingService:
                 row.get("p213_NumeroAsociadosInscritosEnPadronPrestadorServicio")
             ),
             "charges_family_fee": safe_str(row.get("p214_PrestadorServicioSaneamientoCobraCuotaFamiliar"))
-            == "sí",
+            == "si",
             "family_fee_frequency": row.get("p215_CobroDeLaCuotaFamiliarPorElServicioAgua", ""),
             "average_family_fee": safe_numeric(row.get("p216_CuotaFamiliarPromedio")),
             "delinquent_associates": safe_numeric(row.get("p217_AsociadosMorososCuotaFamiliar")),
-            "survey_module_completed": safe_str(row.get("Completado_EncuestaModulo")) == "sí",
+            "survey_module_completed": safe_str(row.get("Completado_EncuestaModulo")).lower() == "si",
             "has_residual_chlorine_register": safe_str(
                 row.get("p207C1_PrestadorServicioAySTieneDocumentosDeGestion_RegistorCloroResidual")
-            )
-            == "sí",
+            ).lower()
+            == "si",
         }
 
     @staticmethod
@@ -230,9 +231,9 @@ class CSVProcessingService:
 
         return {
             "system_last_modified": system_last_modified,
-            "continuous_water_service": safe_str(row.get("p302_ServicioAguaContinuo24Horas")) == "sí",
-            "has_chlorination_system": safe_str(row.get("p315_TieneSistemaCloracion")) == "sí",
-            "chlorinates_water": safe_str(row.get("p315a_RealizaCloracionAgua")) == "sí",
+            "continuous_water_service": safe_str(row.get("p302_ServicioAguaContinuo24Horas")).lower() == "si",
+            "has_chlorination_system": safe_str(row.get("p315_TieneSistemaCloracion")).lower() == "si",
+            "chlorinates_water": safe_str(row.get("p315a_RealizaCloracionAgua")).lower() == "si",
             "served_population_with_connection": safe_numeric(row.get("p310_PoblacionAtendidaConexion")),
             "inhabited_houses_with_connection": safe_numeric(row.get("p310_ViviendasHabitadasConexion")),
             "water_system_type": safe_str(row.get("p334_TipoSistemaAguaCuenta")),
