@@ -31,6 +31,7 @@ psycopg2==2.9.9
 pycodestyle==2.12.1
 pyflakes==3.2.0
 python-dateutil==2.9.0.post0
+python-decouple==3.8
 pytz==2024.2
 PyYAML==6.0.2
 questionary==2.0.1
@@ -41,5 +42,4 @@ tomlkit==0.13.2
 tzdata==2024.2
 virtualenv==20.26.6
 wcwidth==0.2.13
-whitenoise==6.7.0
 whitenoise==6.7.0
