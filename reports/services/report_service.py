@@ -57,6 +57,10 @@ class ReportService:
                 province.id, last_year, last_month
             ),
             "ubs_access": DistrictRepository.get_ubs_access_by_province(province.id, last_year, last_month),
+            "houses_water": DistrictRepository.get_water_houses_by_province(
+                province.id, last_year, last_month
+            ),
+            "houses_ubs": DistrictRepository.get_ubs_houses_by_province(province.id, last_year, last_month),
             **people_resume,
         }
         return data

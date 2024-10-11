@@ -1,6 +1,6 @@
 # locations/repositories/district_repository.py
 from locations.models import District
-from django.db.models import Sum, F, FloatField, ExpressionWrapper, Case, When
+from django.db.models import Sum, F, FloatField, ExpressionWrapper, Case, When, Q
 
 
 class DistrictRepository:
@@ -78,4 +78,65 @@ class DistrictRepository:
                 ),
             )
             .values("name", "total_population", "total_population_with_ubs", "percentage_with_ubs")
+        )
+
+    @staticmethod
+    def get_water_houses_by_province(province_id, year, month):
+        return (
+            District.objects.filter(
+                population_centers__dataset_i_records__year=year,
+                population_centers__dataset_i_records__month=month,
+                province_id=province_id,
+            )
+            .annotate(
+                total_houses=Sum("population_centers__dataset_i_records__inhabited_houses"),
+                total_houses_with_water=Sum(
+                    Case(
+                        When(
+                            population_centers__dataset_i_records__has_water_system=True,
+                            then=F("population_centers__dataset_i_records__total_houses_with_connection"),
+                        ),
+                        When(
+                            Q(population_centers__dataset_i_records__survey_type="Hijo")
+                            & Q(population_centers__dataset_i_records__total_houses_with_connection__gt=0),
+                            then=F("population_centers__dataset_i_records__total_houses_with_connection"),
+                        ),
+                        default=0,
+                        output_field=FloatField(),
+                    )
+                ),
+                percentage_with_water=ExpressionWrapper(
+                    F("total_houses_with_water") * 100 / F("total_houses"),
+                    output_field=FloatField(),
+                ),
+            )
+            .values("name", "total_houses", "total_houses_with_water", "percentage_with_water")
+        )
+
+    @staticmethod
+    def get_ubs_houses_by_province(province_id, year, month):
+        return (
+            District.objects.filter(
+                population_centers__dataset_i_records__year=year,
+                population_centers__dataset_i_records__month=month,
+                province_id=province_id,
+            )
+            .annotate(
+                total_houses=Sum("population_centers__dataset_i_records__inhabited_houses"),
+                total_houses_with_ubs=Sum(
+                    Case(
+                        When(
+                            population_centers__dataset_i_records__has_sanitation_system=True,
+                            then=F("population_centers__dataset_i_records__inhabited_houses"),
+                        ),
+                        default=0,
+                        output_field=FloatField(),
+                    )
+                ),
+                percentage_with_ubs=ExpressionWrapper(
+                    F("total_houses_with_ubs") * 100 / F("total_houses"),
+                    output_field=FloatField(),
+                ),
+            )
+            .values("name", "total_houses", "total_houses_with_ubs", "percentage_with_ubs")
         )

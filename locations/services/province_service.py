@@ -1,5 +1,6 @@
 from locations.repositories.province_repository import ProvinceRepository
 from locations.serializers import ProvinceSerializer
+from locations.services.district_service import DistrictService
 from surveys.repositories.dataset_i_repository import DatasetIRepository
 
 
@@ -40,3 +41,10 @@ class ProvinceService:
             "ubs_access": ProvinceRepository.get_ubs_access_for_all_provinces(last_year, last_month),
         }
         return data
+
+    @classmethod
+    def get_provinces_with_districts(cls):
+        return {
+            "provinces": ProvinceService.get_all(),
+            "districts": DistrictService.get_all(),
+        }
